@@ -10,31 +10,31 @@ using ControleGastos.Models;
 
 namespace ControleGastos.Controllers
 {
-    public class TransacaoController : Controller
+    public class TransacaosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ControleContext _context;
 
-        public TransacaoController(ApplicationDbContext context)
+        public TransacaosController(ControleContext context)
         {
             _context = context;
         }
 
-        // GET: Transacao
+        // GET: Transacaos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Transacoes.Include(t => t.Pessoa);
-            return View(await applicationDbContext.ToListAsync());
+            var controleContext = _context.Transacao.Include(t => t.Pessoa);
+            return View(await controleContext.ToListAsync());
         }
 
-        // GET: Transacao/Details/5
+        // GET: Transacaos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Transacoes == null)
+            if (id == null || _context.Transacao == null)
             {
                 return NotFound();
             }
 
-            var transacao = await _context.Transacoes
+            var transacao = await _context.Transacao
                 .Include(t => t.Pessoa)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (transacao == null)
@@ -45,19 +45,19 @@ namespace ControleGastos.Controllers
             return View(transacao);
         }
 
-        // GET: Transacao/Create
+        // GET: Transacaos/Create
         public IActionResult Create()
         {
-            ViewData["PessoaId"] = new SelectList(_context.Pessoas, "Id", "Nome");
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Nome");
             return View();
         }
 
-        // POST: Transacao/Create
+        // POST: Transacaos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PessoaId,Descricao,Tipo,Valor")] Transacao transacao)
+        public async Task<IActionResult> Create([Bind("Id,PessoaId,Descricao,Tipo,Valor,DataRegistro")] Transacao transacao)
         {
             if (ModelState.IsValid)
             {
@@ -65,33 +65,33 @@ namespace ControleGastos.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PessoaId"] = new SelectList(_context.Pessoas, "Id", "Id", transacao.PessoaId);
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Id", transacao.PessoaId);
             return View(transacao);
         }
 
-        // GET: Transacao/Edit/5
+        // GET: Transacaos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Transacoes == null)
+            if (id == null || _context.Transacao == null)
             {
                 return NotFound();
             }
 
-            var transacao = await _context.Transacoes.FindAsync(id);
+            var transacao = await _context.Transacao.FindAsync(id);
             if (transacao == null)
             {
                 return NotFound();
             }
-            ViewData["PessoaId"] = new SelectList(_context.Pessoas, "Id", "Id", transacao.PessoaId);
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Id", transacao.PessoaId);
             return View(transacao);
         }
 
-        // POST: Transacao/Edit/5
+        // POST: Transacaos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PessoaId,Descricao,Tipo,Valor")] Transacao transacao)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PessoaId,Descricao,Tipo,Valor,DataRegistro")] Transacao transacao)
         {
             if (id != transacao.Id)
             {
@@ -118,19 +118,19 @@ namespace ControleGastos.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PessoaId"] = new SelectList(_context.Pessoas, "Id", "Id", transacao.PessoaId);
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Id", transacao.PessoaId);
             return View(transacao);
         }
 
-        // GET: Transacao/Delete/5
+        // GET: Transacaos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Transacoes == null)
+            if (id == null || _context.Transacao == null)
             {
                 return NotFound();
             }
 
-            var transacao = await _context.Transacoes
+            var transacao = await _context.Transacao
                 .Include(t => t.Pessoa)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (transacao == null)
@@ -141,19 +141,19 @@ namespace ControleGastos.Controllers
             return View(transacao);
         }
 
-        // POST: Transacao/Delete/5
+        // POST: Transacaos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Transacoes == null)
+            if (_context.Transacao == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Transacoes'  is null.");
+                return Problem("Entity set 'ControleContext.Transacao'  is null.");
             }
-            var transacao = await _context.Transacoes.FindAsync(id);
+            var transacao = await _context.Transacao.FindAsync(id);
             if (transacao != null)
             {
-                _context.Transacoes.Remove(transacao);
+                _context.Transacao.Remove(transacao);
             }
             
             await _context.SaveChangesAsync();
@@ -162,7 +162,7 @@ namespace ControleGastos.Controllers
 
         private bool TransacaoExists(int id)
         {
-          return _context.Transacoes.Any(e => e.Id == id);
+          return _context.Transacao.Any(e => e.Id == id);
         }
     }
 }

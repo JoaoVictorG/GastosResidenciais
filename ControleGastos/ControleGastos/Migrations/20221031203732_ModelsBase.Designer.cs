@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ControleGastos.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221028224657_PessoaTransacao")]
-    partial class PessoaTransacao
+    [DbContext(typeof(ControleContext))]
+    [Migration("20221031203732_ModelsBase")]
+    partial class ModelsBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,7 +44,7 @@ namespace ControleGastos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pessoa", (string)null);
+                    b.ToTable("Pessoa");
                 });
 
             modelBuilder.Entity("ControleGastos.Models.Transacao", b =>
@@ -54,6 +54,9 @@ namespace ControleGastos.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DataRegistro")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
@@ -71,25 +74,37 @@ namespace ControleGastos.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PessoaId");
-
-                    b.ToTable("Transacao", (string)null);
+                    b.ToTable("Transacao");
                 });
 
-            modelBuilder.Entity("ControleGastos.Models.Transacao", b =>
+            modelBuilder.Entity("PessoaTransacao", b =>
                 {
-                    b.HasOne("ControleGastos.Models.Pessoa", "Pessoa")
-                        .WithMany("Transacaos")
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransacaoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PessoaId", "TransacaoId");
+
+                    b.HasIndex("TransacaoId");
+
+                    b.ToTable("PessoaTransacao");
+                });
+
+            modelBuilder.Entity("PessoaTransacao", b =>
+                {
+                    b.HasOne("ControleGastos.Models.Pessoa", null)
+                        .WithMany()
                         .HasForeignKey("PessoaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Pessoa");
-                });
-
-            modelBuilder.Entity("ControleGastos.Models.Pessoa", b =>
-                {
-                    b.Navigation("Transacaos");
+                    b.HasOne("ControleGastos.Models.Transacao", null)
+                        .WithMany()
+                        .HasForeignKey("TransacaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

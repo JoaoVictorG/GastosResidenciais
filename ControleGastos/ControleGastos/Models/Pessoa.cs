@@ -10,8 +10,10 @@ namespace ControleGastos.Models
         [Display(Name = "Idade")]
         public int Idade { get; set; }
         [Display(Name = "Data de Registro")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0: dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DataRegistro { get; set; } = DateTime.Now.Date;
 
-        public virtual List<Transacao>? Transacaos { get; set; }
+        public ICollection<Transacao>? Transacao { get; set; }
     }
 }

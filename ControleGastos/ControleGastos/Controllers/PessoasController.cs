@@ -7,33 +7,60 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControleGastos.Data;
 using ControleGastos.Models;
+using ControleGastos.Models.ControleViewModels;
 
 namespace ControleGastos.Controllers
 {
-    public class PessoaController : Controller
+    public class PessoasController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ControleContext _context;
 
-        public PessoaController(ApplicationDbContext context)
+        public PessoasController(ControleContext context)
         {
             _context = context;
         }
 
-        // GET: Pessoa
-        public async Task<IActionResult> Index()
+        // GET: Pessoas
+        public async Task<IActionResult> Index(int? id, int? courseID)
         {
-              return View(await _context.Pessoas.ToListAsync());
+            var viewModel = new PessoaIndexData();
+            viewModel.Pessoas = await _context.Pessoa
+                  .Include(i => i.Transacao)
+                  .OrderBy(i => i.Nome)
+                  .ToListAsync();
+
+            if (id != null)
+            {
+                ViewData["InstructorID"] = id.Value;
+                Pessoa pessoa = viewModel.Pessoas.Where(
+                    i => i.Id == id.Value).Single();
+                viewModel.Transacaos = pessoa.Transacao;
+            }
+
+            //if (courseID != null)
+            //{
+            //    ViewData["CourseID"] = courseID.Value;
+            //    var selectedCourse = viewModel.Courses.Where(x => x.CourseID == courseID).Single();
+            //    await _context.Entry(selectedCourse).Collection(x => x.Enrollments).LoadAsync();
+            //    foreach (Enrollment enrollment in selectedCourse.Enrollments)
+            //    {
+            //        await _context.Entry(enrollment).Reference(x => x.Student).LoadAsync();
+            //    }
+            //    viewModel.Enrollments = selectedCourse.Enrollments;
+            //}
+
+            return View(viewModel);
         }
 
-        // GET: Pessoa/Details/5
+        // GET: Pessoas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Pessoas == null)
+            if (id == null || _context.Pessoa == null)
             {
                 return NotFound();
             }
 
-            var pessoa = await _context.Pessoas
+            var pessoa = await _context.Pessoa
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pessoa == null)
             {
@@ -43,13 +70,13 @@ namespace ControleGastos.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoa/Create
+        // GET: Pessoas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Pessoa/Create
+        // POST: Pessoas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -65,15 +92,15 @@ namespace ControleGastos.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoa/Edit/5
+        // GET: Pessoas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Pessoas == null)
+            if (id == null || _context.Pessoa == null)
             {
                 return NotFound();
             }
 
-            var pessoa = await _context.Pessoas.FindAsync(id);
+            var pessoa = await _context.Pessoa.FindAsync(id);
             if (pessoa == null)
             {
                 return NotFound();
@@ -81,7 +108,7 @@ namespace ControleGastos.Controllers
             return View(pessoa);
         }
 
-        // POST: Pessoa/Edit/5
+        // POST: Pessoas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -116,15 +143,15 @@ namespace ControleGastos.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoa/Delete/5
+        // GET: Pessoas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Pessoas == null)
+            if (id == null || _context.Pessoa == null)
             {
                 return NotFound();
             }
 
-            var pessoa = await _context.Pessoas
+            var pessoa = await _context.Pessoa
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pessoa == null)
             {
@@ -134,19 +161,19 @@ namespace ControleGastos.Controllers
             return View(pessoa);
         }
 
-        // POST: Pessoa/Delete/5
+        // POST: Pessoas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Pessoas == null)
+            if (_context.Pessoa == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Pessoas'  is null.");
+                return Problem("Entity set 'ControleContext.Pessoa'  is null.");
             }
-            var pessoa = await _context.Pessoas.FindAsync(id);
+            var pessoa = await _context.Pessoa.FindAsync(id);
             if (pessoa != null)
             {
-                _context.Pessoas.Remove(pessoa);
+                _context.Pessoa.Remove(pessoa);
             }
             
             await _context.SaveChangesAsync();
@@ -155,7 +182,7 @@ namespace ControleGastos.Controllers
 
         private bool PessoaExists(int id)
         {
-          return _context.Pessoas.Any(e => e.Id == id);
+          return _context.Pessoa.Any(e => e.Id == id);
         }
     }
 }
