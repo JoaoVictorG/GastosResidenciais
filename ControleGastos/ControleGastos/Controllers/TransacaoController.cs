@@ -48,7 +48,7 @@ namespace ControleGastos.Controllers
         // GET: Transacao/Create
         public IActionResult Create()
         {
-            ViewData["PessoaId"] = new SelectList(_context.Pessoas, "Id", "Id");
+            ViewData["PessoaId"] = new SelectList(_context.Pessoas, "Id", "Nome");
             return View();
         }
 

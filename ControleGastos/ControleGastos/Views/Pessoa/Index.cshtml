@@ -37,6 +37,7 @@
                 @Html.DisplayFor(modelItem => item.DataRegistro)
             </td>
             <td>
+                <a asp-controller="Transacao" asp-action="Create" asp-route-id="@item.Id"><i class="bi bi-currency-dollar"></i></a>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
