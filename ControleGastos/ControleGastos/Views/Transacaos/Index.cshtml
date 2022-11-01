@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<ControleGastos.Models.Transacao>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Transações";
 }
+<div class="text-center">
+    <h1>Transações</h1>
+</div>
 
-<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-outline-primary" asp-action="Create">Adicionar</a>
 </p>
 <table class="table">
     <thead>
