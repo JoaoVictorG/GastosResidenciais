@@ -31,7 +31,7 @@ namespace ControleGastos.Controllers
 
             if (id != null)
             {
-                ViewData["InstructorID"] = id.Value;
+                ViewData["PessoaId"] = id.Value;
                 Pessoa pessoa = viewModel.Pessoas.Where(
                     i => i.Id == id.Value).Single();
                 viewModel.Transacaos = pessoa.Transacao;

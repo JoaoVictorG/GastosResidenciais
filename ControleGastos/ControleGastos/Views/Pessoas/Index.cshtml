@@ -4,7 +4,7 @@
     ViewData["Title"] = "Pessoas";
 }
 
-<h2>Instructors</h2>
+<h2>Pessoas</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -21,7 +21,7 @@
         @foreach (var item in Model.Pessoas)
         {
             string selectedRow = "";
-            if (item.Id == (int?)ViewData["InstructorID"])
+            if (item.Id == (int?)ViewData["PessoaId"])
             {
                 selectedRow = "table-success";
             }
@@ -33,25 +33,25 @@
                     @Html.DisplayFor(modelItem => item.Idade)
                 </td>
                 @*<td>
-                    @if (item.OfficeAssignment != null)
-                    {
-                        @item.OfficeAssignment.Location
-                    }
-                </td>
-                <td>
-                    @foreach (var course in item.CourseAssignments)
-                    {
-                        @course.Course.CourseID @course.Course.Title <br />
-                    }
-                </td>*@
-                <td>
+            @if (item.OfficeAssignment != null)
+            {
+            @item.OfficeAssignment.Location
+            }
+            </td>
+            <td>
+            @foreach (var course in item.CourseAssignments)
+            {
+            @course.Course.CourseID @course.Course.Title <br />
+            }
+            </td>*@
+                <td class="text-center">
                     <a asp-action="Index" asp-route-id="@item.Id">Select</a> |
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
-           }
+        }
     </tbody>
 </table>
 @if (Model.Transacaos != null)
@@ -62,22 +62,44 @@
             <th>Tipo</th>
             <th>Valor</th>
         </tr>
-
+        @{
+            decimal valorDespesas = 0;
+            decimal valorReceita = 0;
+            decimal saldo = 0;
+        }
         @foreach (var item in Model.Transacaos)
         {
             string selectedRow = "";
             <tr class="@selectedRow">
                 @*<td>
-                    @Html.ActionLink("Select", "Index", new { courseID = item.CourseID })
-                </td>*@
+        @Html.ActionLink("Select", "Index", new { courseID = item.CourseID })
+        </td>*@
                 <td>
                     @item.Tipo
                 </td>
                 <td>
                     @item.Valor
                 </td>
+                @{
+                    if (item.Tipo == "Despesa")
+                    {
+                        valorDespesas = valorDespesas + item.Valor;
+                    }
+                    else
+                    {
+                        valorReceita = valorReceita + item.Valor;
+                    }
+
+                }
             </tr>
         }
 
     </table>
+    <h3>@valorDespesas</h3>
+    <h3>@valorReceita</h3>
+
+     saldo =  valorReceita - valorDespesas;
+
+    <h3>@saldo</h3>
+
 }
