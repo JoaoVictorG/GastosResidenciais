@@ -1,4 +1,5 @@
-﻿@model ControleGastos.Models.ControleViewModels.PessoaIndexData
+﻿@using System.Globalization
+@model ControleGastos.Models.ControleViewModels.PessoaIndexData
 
 @{
     ViewData["Title"] = "Pessoas";
@@ -59,12 +60,13 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 p-4">
         <h3>Transações do Usuário</h3>
         @if (Model.Transacaos != null)
         {
             <table class="table">
                 <tr>
+                    <th>Descrição</th>
                     <th>Tipo</th>
                     <th>Valor</th>
                 </tr>
@@ -81,10 +83,13 @@
                 @Html.ActionLink("Select", "Index", new { courseID = item.CourseID })
                 </td>*@
                         <td>
+                            @item.Descricao
+                        </td>
+                        <td>
                             @item.Tipo
                         </td>
                         <td>
-                            @item.Valor
+                            R$ @Convert.ToDecimal(item.Valor).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))
                         </td>
                         @{
                             if (item.Tipo == "Despesa")
@@ -101,12 +106,20 @@
                 }
 
             </table>
-            <h3>@valorDespesas</h3>
-            <h3>@valorReceita</h3>
+            <h5>Receita Total: R$ @Convert.ToDecimal(valorReceita).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))</h5>
+            <h5>Despesa Total: R$ @Convert.ToDecimal(valorDespesas).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))</h5>
 
             saldo = valorReceita - valorDespesas;
-
-            <h3>@saldo</h3>
+            string colorSaldo = "";
+            if(saldo >= 0)
+            {
+                colorSaldo = "text-success";
+            }
+            else
+            {
+                colorSaldo = "text-danger";
+            }
+            <h4 class="@colorSaldo">Saldo Final: R$ @Convert.ToDecimal(saldo).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))</h4>
 
         }
     </div>
