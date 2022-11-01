@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ControleGastos.Models.Transacao>
+﻿@using System.Globalization
+@model IEnumerable<ControleGastos.Models.Transacao>
 
 @{
     ViewData["Title"] = "Transações";
@@ -27,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.DataRegistro)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Pessoa)
+                @Html.DisplayNameFor(model => model.Pessoa.Nome)
             </th>
         </tr>
     </thead>
@@ -48,7 +49,7 @@
                     @Html.DisplayFor(modelItem => item.Tipo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Valor)
+                    R$ @Convert.ToDecimal(item.Valor).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DataRegistro)
@@ -68,10 +69,29 @@
         }
     </tbody>
 </table>
-
-<h3>@valorReceita</h3>
-<h3>@valorDespesas</h3>
-@{
-    saldo = valorReceita - valorDespesas;
-}
-<h3>@saldo</h3>
+<div class="row text-center">
+    <div class="col-md">
+        <h3>Receita Total</h3>
+        <h4>R$ @Convert.ToDecimal(valorReceita).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))</h4>
+    </div>
+    <div class="col-md">
+        <h3>Despesa Total</h3>
+        <h4>R$ @Convert.ToDecimal(valorDespesas).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))</h4>
+    </div>
+    @{
+        saldo = valorReceita - valorDespesas;
+        string colorSaldo = "";
+            if (saldo >= 0)
+            {
+                colorSaldo = "text-success";
+            }
+            else
+            {
+                colorSaldo = "text-danger";
+            }
+    }
+    <div class="col-md @colorSaldo">
+        <h3>Saldo Final</h3>
+        <h4>R$ @Convert.ToDecimal(saldo).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))</h4>
+    </div>
+</div>
