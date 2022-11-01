@@ -26,25 +26,6 @@ namespace ControleGastos.Controllers
             return View(await controleContext.ToListAsync());
         }
 
-        // GET: Transacaos/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Transacao == null)
-            {
-                return NotFound();
-            }
-
-            var transacao = await _context.Transacao
-                .Include(t => t.Pessoa)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (transacao == null)
-            {
-                return NotFound();
-            }
-
-            return View(transacao);
-        }
-
         // GET: Transacaos/Create
         public IActionResult Create()
         {

@@ -39,24 +39,6 @@ namespace ControleGastos.Controllers
             return View(viewModel);
         }
 
-        // GET: Pessoas/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Pessoa == null)
-            {
-                return NotFound();
-            }
-
-            var pessoa = await _context.Pessoa
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoa == null)
-            {
-                return NotFound();
-            }
-
-            return View(pessoa);
-        }
-
         // GET: Pessoas/Create
         public IActionResult Create()
         {
