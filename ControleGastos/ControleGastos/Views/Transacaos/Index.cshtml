@@ -12,63 +12,65 @@
 <p>
     <a class="btn btn-outline-primary" asp-action="Create">Adicionar</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Valor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataRegistro)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pessoa.Nome)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-
-        @{
-            decimal valorDespesas = 0;
-            decimal valorReceita = 0;
-            decimal saldo = 0;
-        }
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table class="table text-nowrap">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Descricao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tipo)
-                </td>
-                <td>
-                    R$ @Convert.ToDecimal(item.Valor).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DataRegistro)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Pessoa.Nome)
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descricao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Valor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataRegistro)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pessoa.Nome)
+                </th>
             </tr>
-            @if (item.Tipo == "Despesa")
-            {
-                valorDespesas = valorDespesas + item.Valor;
+        </thead>
+        <tbody>
+
+            @{
+                decimal valorDespesas = 0;
+                decimal valorReceita = 0;
+                decimal saldo = 0;
             }
-            else
+            @foreach (var item in Model)
             {
-                valorReceita = valorReceita + item.Valor;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                    <td>
+                        R$ @Convert.ToDecimal(item.Valor).ToString(CultureInfo.CreateSpecificCulture("pt-BR"))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataRegistro)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pessoa.Nome)
+                    </td>
+                </tr>
+                @if (item.Tipo == "Despesa")
+                {
+                    valorDespesas = valorDespesas + item.Valor;
+                }
+                else
+                {
+                    valorReceita = valorReceita + item.Valor;
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 <div class="row text-center">
     <div class="col-md">
         <h3>Receita Total</h3>
@@ -81,14 +83,14 @@
     @{
         saldo = valorReceita - valorDespesas;
         string colorSaldo = "";
-            if (saldo >= 0)
-            {
-                colorSaldo = "text-success";
-            }
-            else
-            {
-                colorSaldo = "text-danger";
-            }
+        if (saldo >= 0)
+        {
+            colorSaldo = "text-success";
+        }
+        else
+        {
+            colorSaldo = "text-danger";
+        }
     }
     <div class="col-md @colorSaldo">
         <h3>Saldo Final</h3>
