@@ -31,6 +31,12 @@
         </tr>
     </thead>
     <tbody>
+
+        @{
+            decimal valorDespesas = 0;
+            decimal valorReceita = 0;
+            decimal saldo = 0;
+        }
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -53,7 +59,20 @@
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
-        </tr>
-}
+            </tr>
+            @if(item.Tipo == "Despesa")
+            {
+                valorDespesas = valorDespesas + item.Valor;
+            }
+            else
+            {
+                valorReceita = valorReceita + item.Valor;
+            }
+        }
     </tbody>
 </table>
+
+<h3>@valorReceita</h3>
+<h3>@valorDespesas</h3>
+@{saldo = valorReceita - valorDespesas;}
+<h3>@saldo</h3>
